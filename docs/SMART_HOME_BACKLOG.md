@@ -10,6 +10,8 @@
 >
 > **Estado del proyecto:** este documento es el plan, **no** un registro de lo ya construido. Al 2026-11-05 no existe código de la aplicación en el repositorio.
 >
+> **Avance al 2026-11-05:** EP-00 terminado (documentación y ADR propuestos). EP-01 en progreso: base Laravel 12, MySQL, Tailwind, Alpine, Inter, Lucide, colas, scheduler, configuración de OpenRouter, repositorio Git y CI listos; **EP01-05 pendiente** (las migraciones de dominio se crearán en la épica que define cada entidad). Las 10 ADR están en estado `Propuesto` y requieren aprobación.
+>
 > **Origen:** contenido sincronizado desde el tablero Trello «SmartHome | Desarrollo del Sistema» (`https://trello.com/b/TUKFQqRh/smarthome-desarrollo-del-sistema`).
 
 ## 1. Alcance y principios que no deben perderse
@@ -94,13 +96,13 @@
 **Historias:** Como desarrollador quiero conocer reglas e interdependencias para implementarlas correctamente; como integrante quiero que el sistema no cambie la forma prevista de administrar el hogar.
 
 **Tareas:**
-- [ ] EP00-01 Crear glosario: hogar, usuario, cuenta, saldo, ingreso, egreso, transferencia, presupuesto, apartado, deuda, receta, ingrediente, producto, menú, compra y plan.
-- [ ] EP00-02 Diagramar entidades y relaciones con campos de pertenencia/visibilidad (`household_id`, `created_by`, `owner_user_id` según modelo).
-- [ ] EP00-03 Documentar reglas RG-01 a RG-12 y casos de uso críticos.
-- [ ] EP00-04 Mantener matriz de requisitos ↔ pantallas ↔ historias ↔ pruebas.
-- [ ] EP00-05 Definir roles y niveles de privacidad, con administrador de hogar y usuarios participantes.
-- [ ] EP00-06 Registrar decisiones pendientes como ADR: día de corte quincenal, reglas de cuentas compartidas, representación de paquetes, tratamiento de importes históricos.
-- [ ] EP00-07 Definir alcance MVP vs. P1/P2, y convenciones de prioridad, nomenclatura y versionado.
+- [x] EP00-01 Crear glosario: hogar, usuario, cuenta, saldo, ingreso, egreso, transferencia, presupuesto, apartado, deuda, receta, ingrediente, producto, menú, compra y plan.
+- [x] EP00-02 Diagramar entidades y relaciones con campos de pertenencia/visibilidad (`household_id`, `created_by`, `owner_user_id` según modelo).
+- [x] EP00-03 Documentar reglas RG-01 a RG-12 y casos de uso críticos.
+- [x] EP00-04 Mantener matriz de requisitos ↔ pantallas ↔ historias ↔ pruebas.
+- [x] EP00-05 Definir roles y niveles de privacidad, con administrador de hogar y usuarios participantes.
+- [x] EP00-06 Registrar decisiones pendientes como ADR: día de corte quincenal, reglas de cuentas compartidas, representación de paquetes, tratamiento de importes históricos.
+- [x] EP00-07 Definir alcance MVP vs. P1/P2, y convenciones de prioridad, nomenclatura y versionado.
 
 **Criterios de aceptación:** ninguna entidad crítica carece de dueño/ámbito; presupuestos y movimientos tienen definiciones distintas; cada pantalla tiene una épica responsable y prueba prevista; los cambios de alcance se registran con fecha y motivo.
 
@@ -112,18 +114,20 @@
 
 **Dependencias:** EP-00 · **Estado inicial:** Backlog
 
+**Avance:** base instalada y verificada el 2026-11-05. EP01-05 queda pendiente de las migraciones de dominio de EP-03/EP-04; la convención `DECIMAL(14,2)` ya está declarada en `config/smarthome.php`.
+
 **Objetivo:** disponer de una aplicación mantenible preparada para funcionalidades familiares.
 
 **Tareas:**
-- [ ] EP01-01 Crear proyecto Laravel 12, configurar PHP compatible, MySQL, Vite y entorno local.
-- [ ] EP01-02 Instalar/configurar Blade, Tailwind CSS, Alpine.js, Inter y Lucide.
-- [ ] EP01-03 Estructurar rutas, controllers, requests, services/actions, policies, jobs, notifications y tests.
-- [ ] EP01-04 Configurar autenticación segura, sesiones, CSRF, rate limiting, registro de errores y manejo uniforme de excepciones.
+- [x] EP01-01 Crear proyecto Laravel 12, configurar PHP compatible, MySQL, Vite y entorno local.
+- [x] EP01-02 Instalar/configurar Blade, Tailwind CSS, Alpine.js, Inter y Lucide.
+- [x] EP01-03 Estructurar rutas, controllers, requests, services/actions, policies, jobs, notifications y tests.
+- [x] EP01-04 Configurar autenticación segura, sesiones, CSRF, rate limiting, registro de errores y manejo uniforme de excepciones.
 - [ ] EP01-05 Crear migraciones y seeders iniciales separados por módulo; definir moneda `DECIMAL(14,2)` y timestamps.
-- [ ] EP01-06 Preparar storage privado, subida segura de imágenes/comprobantes y política de backups.
-- [ ] EP01-07 Configurar colas, Scheduler, envío de correo transaccional, logs y variables de entorno.
-- [ ] EP01-08 Configurar repositorio Git, ramas, estándares de código, formateador y ejecución automática de pruebas.
-- [ ] EP01-09 Implementar detección de entorno y estructura de configuración para OpenRouter sin exponer API keys.
+- [x] EP01-06 Preparar storage privado, subida segura de imágenes/comprobantes y política de backups.
+- [x] EP01-07 Configurar colas, Scheduler, envío de correo transaccional, logs y variables de entorno.
+- [x] EP01-08 Configurar repositorio Git, ramas, estándares de código, formateador y ejecución automática de pruebas.
+- [x] EP01-09 Implementar detección de entorno y estructura de configuración para OpenRouter sin exponer API keys.
 
 **Criterios:** instalación reproducible desde README; `migrate:fresh --seed` funcional; tests base pasan; ninguna clave en repositorio; errores no muestran trazas sensibles al usuario.
 
