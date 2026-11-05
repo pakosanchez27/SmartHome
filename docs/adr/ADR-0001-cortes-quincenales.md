@@ -1,9 +1,9 @@
 # ADR-0001 — Cortes de quincena y arrastre de saldo
 
-- **Estado:** Propuesto
+- **Estado:** Parcialmente aprobado
 - **Fecha:** 2026-11-05
 - **Épicas afectadas:** EP-05, EP-08, EP-13, EP-16
-- **Decisor:** Pendiente (titular del producto)
+- **Decisor:** Titular del producto; decisiones restantes pendientes
 
 ## Contexto
 
@@ -22,14 +22,16 @@ El hogar usa presupuestos quincenales, pero el corte puede variar (día 15/últi
 
 ## Recomendación
 
-Corte fijo configurable (opción 1) con **arrastre informativo** (B) y posibilidad de asignarlo manualmente. Evita que el presupuesto se comporte como un saldo real (RG-02).
+La recomendación inicial fue corte fijo configurable con arrastre informativo. El titular eligió posteriormente el traslado automático presupuestal; ver la decisión siguiente.
 
 ## Decisión
 
-Pendiente de aprobación.
+El titular aprobó **cortes fijos configurables por hogar** (opción 1) y el **traslado automático del remanente** al siguiente periodo (opción C). El traslado pertenece a la planificación presupuestal: no crea movimientos financieros ni modifica el saldo real de una cuenta (RG-02 y RG-03).
+
+**Pendiente:** día de corte predeterminado, comportamiento al cambiarlo y tratamiento detallado de déficits, correcciones retroactivas y cierres de periodo. Esas reglas no se deducen de la aprobación del traslado automático.
 
 ## Consecuencias
 
 - `budget_periods` necesita configuración de corte por hogar y estado.
-- La UI debe distinguir "remanente anterior" de "disponible real".
+- La UI debe identificar el remanente trasladado como presupuesto, no como saldo o efectivo disponible real.
 - Pruebas: periodos irregulares, cambio de corte y cierre de quincena.

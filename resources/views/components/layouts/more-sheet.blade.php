@@ -6,12 +6,14 @@
     id="mas-hoja"
     x-show="moreOpen"
     x-cloak
-    x-on:keydown.escape.window="closeMore()"
+    x-on:keydown="trapMore($event)"
     class="fixed inset-0 z-50 lg:hidden"
 >
     <div class="absolute inset-0 bg-ink/40" x-on:click="closeMore()" aria-hidden="true"></div>
 
     <div
+        x-ref="morePanel"
+        tabindex="-1"
         role="dialog"
         aria-modal="true"
         aria-labelledby="mas-titulo"

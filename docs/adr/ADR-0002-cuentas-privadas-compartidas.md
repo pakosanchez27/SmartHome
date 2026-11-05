@@ -1,9 +1,9 @@
 # ADR-0002 — Cuentas privadas/compartidas y administración
 
-- **Estado:** Propuesto
+- **Estado:** Parcialmente aprobado
 - **Fecha:** 2026-11-05
 - **Épicas afectadas:** EP-03, EP-04, EP-05, EP-16, EP-17, EP-18
-- **Decisor:** Pendiente (titular del producto)
+- **Decisor:** Titular del producto; decisiones restantes pendientes
 
 ## Contexto
 
@@ -25,7 +25,9 @@ Privada por defecto (opción 1). Compartir es una acción explícita del titular
 
 ## Decisión
 
-Pendiente de aprobación.
+El titular confirmó que **las cuentas serán privadas por defecto**. RG-01 impide que otros integrantes consulten una cuenta privada, incluidos sus saldos y agregados. El titular puede compartirla con el hogar y después volverla privada; el historial se conserva.
+
+**Pendiente de precisar:** efectos concretos sobre movimientos, reportes y agregados históricos al cambiar la visibilidad, y si otras personas pueden administrarla. Conservar el historial no implica autorizar su consulta a integrantes sin permiso.
 
 ## Consecuencias
 

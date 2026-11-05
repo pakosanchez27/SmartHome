@@ -1,5 +1,6 @@
 @props([
     'breadcrumbs' => [],
+    'demo' => true,
 ])
 
 <header class="sticky top-0 z-30 border-b border-border bg-surface/95 backdrop-blur">
@@ -24,13 +25,20 @@
                     <x-icon name="house" class="size-[18px]" />
                 </span>
 
-                <span class="min-w-0 truncate text-sm font-semibold text-ink">Hogar Rivera</span>
+                <span class="min-w-0 truncate text-sm font-semibold text-ink">{{ $demo ? 'Hogar Rivera' : 'SmartHome' }}</span>
 
-                <span class="rounded-full bg-surface-muted px-2 py-0.5 text-[10px] font-medium text-muted">2 integrantes</span>
+                @if ($demo)<span class="rounded-full bg-surface-muted px-2 py-0.5 text-[10px] font-medium text-muted">2 integrantes</span>@endif
             </div>
         </div>
 
         <div class="flex shrink-0 items-center gap-1 sm:gap-2">
+            @auth
+                <a href="{{ route('profile.edit') }}" class="inline-flex min-h-11 items-center rounded-control px-2 text-sm font-medium text-primary">Mi perfil</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="min-h-11 rounded-control px-2 text-sm font-medium text-ink">Cerrar sesión</button>
+                </form>
+            @endauth
             <button
                 type="button"
                 disabled
@@ -41,9 +49,9 @@
                 <x-icon name="bell" class="size-5" />
             </button>
 
-            <span class="flex size-9 items-center justify-center rounded-control bg-primary-soft text-[12px] font-semibold text-primary" aria-hidden="true">
+            @if ($demo)<span class="flex size-9 items-center justify-center rounded-control bg-primary-soft text-[12px] font-semibold text-primary" aria-hidden="true">
                 AR
-            </span>
+            </span>@endif
         </div>
     </div>
 </header>

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\PasswordRecoveryController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -8,3 +11,30 @@ use Illuminate\Support\Facades\Route;
  | Los módulos se registran aquí conforme avanza su épica (ver app/Support/Navigation.php).
  */
 Route::view('/', 'ui-kit')->name('home');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/iniciar-sesion', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/iniciar-sesion', [AuthenticatedSessionController::class, 'store'])->name('login.store');
+    Route::get('/recuperar-acceso', [PasswordRecoveryController::class, 'create'])->name('password.request');
+    Route::post('/recuperar-acceso', [PasswordRecoveryController::class, 'send'])->middleware('throttle:6,1')->name('password.email');
+    Route::get('/restablecer-contrasena/{token}', [PasswordRecoveryController::class, 'edit'])->name('password.reset');
+    Route::post('/restablecer-contrasena', [PasswordRecoveryController::class, 'update'])->middleware('throttle:6,1')->name('password.update');
+});
+
+Route::post('/cerrar-sesion', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth')->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/mi-perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/mi-perfil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/mi-perfil/contrasena', [ProfileController::class, 'password'])->name('profile.password');
+});
+
+// Recorridos de demostración sin persistencia; no son módulos de producción.
+Route::prefix('prototipos')->name('prototypes.')->group(function () {
+    Route::view('/', 'prototypes.index')->name('index');
+    Route::view('/gasto', 'prototypes.expense')->name('expense');
+    Route::view('/presupuesto', 'prototypes.budget')->name('budget');
+    Route::view('/menu', 'prototypes.meals')->name('meals');
+    Route::view('/compras', 'prototypes.shopping')->name('shopping');
+    Route::view('/despensa', 'prototypes.pantry')->name('pantry');
+});

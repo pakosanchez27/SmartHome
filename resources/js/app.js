@@ -1,43 +1,64 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
+import { registerPrototypes } from './prototypes';
 import {
     ArrowLeft,
+    ArrowLeftRight,
     ArrowRight,
     ArrowUpDown,
     Banknote,
     Bell,
     BookOpen,
+    Calendar,
+    CalendarClock,
     CalendarDays,
     ChartColumn,
     Check,
+    CheckCheck,
+    ChefHat,
     ChevronDown,
     ChevronLeft,
     ChevronRight,
     CircleCheck,
     Clock,
+    CreditCard,
     Ellipsis,
+    Flame,
     Funnel,
     Heart,
     House,
+    Image,
     Info,
+    Landmark,
+    ListChecks,
     LoaderCircle,
     Lock,
     LogOut,
     Menu,
     Minus,
     Package,
+    PackagePlus,
     PanelLeftClose,
     PanelLeftOpen,
+    PiggyBank,
     Plus,
     Receipt,
+    ReceiptText,
     RefreshCw,
+    RotateCcw,
+    ScanBarcode,
     Search,
     Settings,
+    ShoppingBasket,
     ShoppingCart,
+    SlidersHorizontal,
     Smartphone,
+    Snowflake,
     Sparkles,
     Sprout,
+    Star,
+    Tag,
     Target,
     Trash,
     TrendingDown,
@@ -46,6 +67,7 @@ import {
     User,
     Users,
     Utensils,
+    UtensilsCrossed,
     Wallet,
     WifiOff,
     X,
@@ -229,6 +251,7 @@ Alpine.data('overlay', (name = null) => ({
 Alpine.data('combobox', (config = {}) => ({
     open: false,
     query: '',
+    name: config.name ?? null,
     options: config.options ?? [],
     selected: config.selected ?? null,
     highlighted: 0,
@@ -271,16 +294,27 @@ Alpine.data('combobox', (config = {}) => ({
         this.$nextTick(() => this.$refs.search?.focus());
     },
 
-    close() {
+    close(focusTrigger = true) {
         this.open = false;
         this.query = '';
-        this.$refs.trigger?.focus();
+
+        if (focusTrigger) {
+            this.$nextTick(() => this.$refs.trigger?.focus());
+        }
     },
 
     select(option) {
         this.selected = option;
         this.open = false;
         this.query = '';
+
+        this.$dispatch('combobox-selected', {
+            name: this.name,
+            value: option.value,
+            label: option.label,
+            meta: option.meta ?? null,
+        });
+
         this.$nextTick(() => this.$refs.trigger?.focus());
     },
 
@@ -321,6 +355,8 @@ Alpine.store('toasts', {
     },
 });
 
+registerPrototypes(Alpine);
+
 Alpine.start();
 
 /*
@@ -330,41 +366,61 @@ Alpine.start();
 createIcons({
     icons: {
         ArrowLeft,
+        ArrowLeftRight,
         ArrowRight,
         ArrowUpDown,
         Banknote,
         Bell,
         BookOpen,
+        Calendar,
+        CalendarClock,
         CalendarDays,
         ChartColumn,
         Check,
+        CheckCheck,
+        ChefHat,
         ChevronDown,
         ChevronLeft,
         ChevronRight,
         CircleCheck,
         Clock,
+        CreditCard,
         Ellipsis,
+        Flame,
         Funnel,
         Heart,
         House,
+        Image,
         Info,
+        Landmark,
+        ListChecks,
         LoaderCircle,
         Lock,
         LogOut,
         Menu,
         Minus,
         Package,
+        PackagePlus,
         PanelLeftClose,
         PanelLeftOpen,
+        PiggyBank,
         Plus,
         Receipt,
+        ReceiptText,
         RefreshCw,
+        RotateCcw,
+        ScanBarcode,
         Search,
         Settings,
+        ShoppingBasket,
         ShoppingCart,
+        SlidersHorizontal,
         Smartphone,
+        Snowflake,
         Sparkles,
         Sprout,
+        Star,
+        Tag,
         Target,
         Trash,
         TrendingDown,
@@ -373,6 +429,7 @@ createIcons({
         User,
         Users,
         Utensils,
+        UtensilsCrossed,
         Wallet,
         WifiOff,
         X,

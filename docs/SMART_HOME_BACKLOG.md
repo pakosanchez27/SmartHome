@@ -625,8 +625,8 @@
 
 Resolver vía `docs/adr/ADR-XXXX.md` cuando impacten la tarea:
 
-- Cortes de quincena y forma de trasladar saldo entre periodos.
-- Política exacta de cuentas privadas/compartidas y administración.
+- Cortes fijos configurables y traslado automático presupuestal aprobados; faltan día predeterminado, cambios de corte y tratamiento de déficits o correcciones retroactivas (ADR-0001).
+- Cuentas privadas por defecto; el titular puede compartirlas y volverlas privadas sin borrar historial. Faltan detalles de acceso histórico y administración (ADR-0002).
 - Pago familiar realizado con cuenta individual.
 - Deuda de tarjeta: gasto original vs. liquidación, sin doble cargo.
 - Apartados virtuales y reservas reales.

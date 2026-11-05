@@ -14,16 +14,17 @@
 @endphp
 
 <div
-    x-data="{ open: false }"
-    x-on:open-modal.window="if ($event.detail === '{{ $name }}') { open = true; $nextTick(() => $refs.panel.focus()) }"
-    x-on:keydown.escape.window="open = false"
+    x-data="overlay('{{ $name }}')"
+    x-on:open-modal.window="if ($event.detail === '{{ $name }}') show()"
+    x-on:close-modal.window="if ($event.detail === '{{ $name }}') hide()"
+    x-on:keydown="trap($event)"
     x-show="open"
     x-cloak
     class="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4"
 >
     <div
         class="absolute inset-0 bg-ink/40"
-        x-on:click="open = false"
+        x-on:click="hide()"
         x-transition.opacity
         aria-hidden="true"
     ></div>
@@ -48,10 +49,10 @@
                 @endif
             </div>
 
-            <x-icon-button label="Cerrar" icon="x" x-on:click="open = false" class="-mr-2 -mt-1" />
+            <x-icon-button label="Cerrar" icon="x" x-on:click="hide()" class="-mr-2 -mt-1" />
         </div>
 
-        <div class="space-y-4 p-5">
+        <div class="max-h-[70dvh] space-y-4 overflow-y-auto p-5">
             {{ $slot }}
         </div>
 

@@ -1,3 +1,5 @@
+@props(['demo' => true])
+
 @php
     $items = \App\Support\Navigation::main();
 @endphp
@@ -18,6 +20,7 @@
     </div>
 
     <div class="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-3 pb-4">
+        @if ($demo)
         <div x-show="!collapsed"  class="rounded-card bg-canvas px-3 py-2.5">
             <p class="text-sm font-semibold leading-snug text-ink">Hogar Rivera</p>
             <p class="text-[12px] leading-snug text-muted">Ana y Luis · Familiar</p>
@@ -28,6 +31,7 @@
                 HR
             </span>
         </div>
+        @endif
 
         <nav aria-label="Módulos">
             <ul class="space-y-1.5">
@@ -78,12 +82,12 @@
     <div class="border-t border-border p-3">
         <div class="flex items-center gap-2.5 rounded-control px-1 py-1.5" x-bind:class="collapsed ? 'justify-center' : ''">
             <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-[12px] font-semibold text-primary" aria-hidden="true">
-                AR
+                {{ $demo ? 'AR' : mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
             </span>
 
             <span x-show="!collapsed"  class="min-w-0 flex-1">
-                <span class="block truncate text-[13px] font-semibold text-ink">Ana Rivera</span>
-                <span class="block text-[12px] text-muted">Administradora</span>
+                <span class="block truncate text-[13px] font-semibold text-ink">{{ $demo ? 'Ana Rivera' : auth()->user()->name }}</span>
+                @if ($demo)<span class="block text-[12px] text-muted">Administradora</span>@endif
             </span>
 
             <button

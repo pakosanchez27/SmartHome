@@ -27,6 +27,7 @@
             <button
                 type="button"
                 aria-pressed="{{ $active ? 'true' : 'false' }}"
+                @if (! empty($item['action'])) x-on:click="{{ $item['action'] }}" @endif
                 @class([
                     $baseClasses,
                     'bg-primary text-white shadow-card' => $active,

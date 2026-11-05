@@ -1,6 +1,7 @@
 @props([
     'title' => null,
     'breadcrumbs' => [],
+    'demo' => true,
 ])
 
 <!DOCTYPE html>
@@ -24,10 +25,10 @@
     </a>
 
     <div x-data="shell()" class="min-h-dvh lg:flex">
-        <x-layouts.sidebar />
+        <x-layouts.sidebar :demo="$demo" />
 
         <div class="flex min-w-0 flex-1 flex-col">
-            <x-layouts.topbar :breadcrumbs="$breadcrumbs" />
+            <x-layouts.topbar :breadcrumbs="$breadcrumbs" :demo="$demo" />
 
             <main id="contenido" tabindex="-1" class="flex-1 px-4 pb-28 pt-5 outline-none sm:px-6 lg:px-8 lg:pb-10 lg:pt-6">
                 <div class="mx-auto w-full max-w-[1200px] space-y-6">
