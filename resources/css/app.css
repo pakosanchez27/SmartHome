@@ -1,0 +1,39 @@
+@import '@fontsource-variable/inter';
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/*
+ | Tokens de identidad SmartHome (EP-02 los extiende).
+ | Teal primario, fondo claro, tinta oscura y acento IA.
+ */
+@theme {
+    --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-primary: #0f766e;
+    --color-primary-hover: #115e59;
+    --color-canvas: #f8fafc;
+    --color-surface: #ffffff;
+    --color-ink: #0f172a;
+    --color-muted: #64748b;
+    --color-border: #e2e8f0;
+    --color-ai: #6366f1;
+
+    --color-success: #15803d;
+    --color-warning: #b45309;
+    --color-danger: #b91c1c;
+    --color-info: #0369a1;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+[x-cloak] {
+    display: none !important;
+}
