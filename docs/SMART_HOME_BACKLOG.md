@@ -140,17 +140,19 @@
 **Dependencias:** EP-00, EP-01 · **Estado inicial:** Backlog
 **Pantallas vinculadas:** transversal; shell de B01 y navegación de todos los módulos.
 
+**Avance 2026-11-05:** tokens, tipografía, layout desktop/móvil, biblioteca base de componentes y guía UI implementados sobre el archivo de Figma (`resources/css/app.css`, `resources/views/components/`, `resources/views/ui-kit.blade.php`, `docs/GUIA_UI.md`). Quedan combobox, date picker, paginación, componentes de dominio y prototipos de flujo.
+
 **Objetivo:** establecer componentes Blade reutilizables que reproduzcan los mockups de diseño sin recargar la aplicación.
 
 **Tareas:**
-- [ ] EP02-01 Convertir identidad a tokens Tailwind: `#0F766E`, `#115E59`, `#F8FAFC`, `#FFFFFF`, `#0F172A`, `#64748B`, `#E2E8F0`, `#6366F1`, estados semánticos.
-- [ ] EP02-02 Definir tipografía Inter, espaciado, radios, contraste AA, foco visible, tamaños táctiles y variantes de íconos.
-- [ ] EP02-03 Crear layout desktop: sidebar colapsable, breadcrumbs, título, acciones, búsqueda y perfil.
-- [ ] EP02-04 Crear layout móvil: barra inferior Inicio/Finanzas/Compras/Alimentación/Más, menús y acción rápida.
-- [ ] EP02-05 Componentes Blade: button, input, money input, select, combobox, date picker, card KPI, badge, table, list card, tabs, modal, drawer, bottom sheet, toast, banner y confirmación.
-- [ ] EP02-06 Estados vacíos, skeletons, errores inline, filtros, paginación y botones con progreso.
+- [x] EP02-01 Convertir identidad a tokens Tailwind: `#0F766E`, `#115E59`, `#F8FAFC`, `#FFFFFF`, `#0F172A`, `#64748B`, `#E2E8F0`, `#6366F1`, estados semánticos.
+- [x] EP02-02 Definir tipografía Inter, espaciado, radios, contraste AA, foco visible, tamaños táctiles y variantes de íconos.
+- [x] EP02-03 Crear layout desktop: sidebar colapsable, breadcrumbs, título, acciones, búsqueda y perfil.
+- [x] EP02-04 Crear layout móvil: barra inferior Inicio/Finanzas/Compras/Alimentación/Más, menús y acción rápida.
+- [ ] EP02-05 Componentes Blade: button, input, money input, select, combobox, date picker, card KPI, badge, table, list card, tabs, modal, drawer, bottom sheet, toast, banner y confirmación. *(avance: button, input, money, select, card KPI, badge, list card, tabs, modal, bottom sheet, toast, banner y confirmación; faltan combobox, date picker, drawer y componente de tabla)*
+- [ ] EP02-06 Estados vacíos, skeletons, errores inline, filtros, paginación y botones con progreso. *(avance: vacío, skeleton, error inline y loading; falta paginación)*
 - [ ] EP02-07 Componentes de dominio: tarjeta receta, selector porciones, producto, control cantidad, checkbox compra, barra presupuesto, progreso de meta, movimiento financiero.
-- [ ] EP02-08 Documentar patrones de formularios de pocos pasos y responsive 360/390/768/1280/1440 px.
+- [x] EP02-08 Documentar patrones de formularios de pocos pasos y responsive 360/390/768/1280/1440 px.
 - [ ] EP02-09 Crear prototipos funcionales de los cinco flujos prioritarios: gasto, presupuesto, menú, compra y stock.
 
 **Criterios:** todas las pantallas emplean componentes compartidos; móvil no contiene tablas horizontales impracticables; teclado, lectores de pantalla y mensajes de error usables; sin botones que parezcan activos y no hagan nada.

@@ -14,7 +14,7 @@ Eres un desarrollador de software senior especializado en **Laravel 12, Blade, M
 2. Identifica el **ID de la épica y tarea** que estás ejecutando (`EP-XX`, `EPXX-YY`). Consulta **`docs/SMART_HOME_BACKLOG.md`** y lee esa épica, sus dependencias, reglas de negocio y criterios de aceptación. No cargues el documento completo en cada tarea si basta una sección.
 3. Antes de cambios importantes, explica brevemente el plan, archivos involucrados y dependencias; implementa en pasos pequeños y verificables. **No desarrolles las 21 épicas a la vez**.
 4. Respeta las reglas de este archivo y el backlog. Si hay ambigüedad con impacto en dinero, privacidad, inventario o integridad, **documenta una ADR y solicita la decisión correspondiente** en vez de inventar reglas silenciosamente.
-5. Si existe un diseño Figma o componentes ya aprobados, respétalos. No cambies arbitrariamente la identidad visual ni agregues frameworks de frontend distintos.
+5. Si existe un diseño Figma o componentes ya aprobados, respétalos. **Toda vista nueva debe implementarse desde el frame correspondiente de Figma** (ver §10.1). No cambies arbitrariamente la identidad visual ni agregues frameworks de frontend distintos.
 6. Acompaña cada funcionalidad con validación server-side, autorización, estados UI, pruebas y manejo de errores. No dejes botones falsos ni vistas puramente decorativas.
 7. Antes de dar una tarea por terminada, ejecuta las verificaciones pertinentes y comunica **qué se implementó, qué se probó, qué falló, qué quedó pendiente y cuál es la siguiente tarea**. Nunca afirmes que una prueba pasó si no la ejecutaste.
 8. No ejecutes comandos destructivos, migraciones irreversibles, borrado masivo de registros o cambios de producción sin autorización explícita. Nunca publiques secretos, datos financieros reales ni credenciales.
@@ -241,6 +241,30 @@ Todas las listas pueden tener artículos manuales, cantidades, precios estimados
 ## 10. UI/UX: calidad exigida en todas las pantallas
 
 **Identidad:** Inter; Lucide; teal `#0F766E` (hover `#115E59`), fondo `#F8FAFC`, superficie `#FFFFFF`, texto `#0F172A`, secundario `#64748B`, borde `#E2E8F0`, acento IA `#6366F1`, estados semánticos accesibles.
+
+### 10.1 Diseño Figma: obligatorio para toda vista nueva
+
+**Fuente de verdad visual:** https://www.figma.com/design/LtvQfQCRtzxeS5iTQj2eqe/Sin-t%C3%ADtulo (Page 1).
+
+Antes de crear o modificar cualquier pantalla, layout o componente de interfaz **debes localizar y respetar el frame correspondiente en Figma**. El diseño no es inspiración: es la especificación. No inventes estructura, colores, tipografías, espaciados, jerarquía ni textos de interfaz que no estén en el mockup.
+
+| Sección del archivo | Contenido | Uso |
+|---|---|---|
+| `03 — Desktop Screens` | Pantallas a 1440 px | Referencia de layout desktop |
+| `04 — Mobile Screens` | Pantallas a 390 px | Referencia de layout móvil |
+| `06 — Dialogs & States` | Estados, modales, sheets, errores | Obligatorio para estados de cada vista |
+| `02 — Components` | Paleta, tipografía, controles, sidebar, bottom nav, tarjetas | Biblioteca UI de EP-02 |
+
+**Reglas de ejecución:**
+
+1. **Identifica el frame por ID de pantalla** (`A01`, `B01`, `C02`, `D01`, etc.). Si la pantalla existe, implementa esa versión y su equivalente 390 px.
+2. **Extrae la especificación de Figma antes de escribir HTML**: usa las herramientas de Figma (`get_design_context`, `get_screenshot`) para leer colores, tamaños, radios, espaciados y textos reales. No estimes a ojo si puedes leerlo.
+3. **Reutiliza lo que ya existe**: tokens de `resources/css/app.css` y componentes de `resources/views/components/`. Si el diseño necesita algo nuevo, conviértelo en componente reutilizable, no en markup suelto dentro de la vista.
+4. **Traduce el diseño a layout responsive nativo** (flex/grid de Tailwind). No copies posicionamiento absoluto ni anchos fijos del canvas.
+5. **Incluye los estados del frame 06**: carga/skeleton, vacío, sin resultados, error, éxito, confirmación y disabled.
+6. **Si la pantalla no existe en Figma**, no la inventes: registra el faltante y pide la definición antes de codificarla.
+7. **Checklist de fidelidad** antes de dar por terminada una vista: colores y tipografía del mockup, targets táctiles de 44 px, foco visible, labels persistentes, errores inline, versión mobile sin tablas horizontales y sin botones que aparenten estar activos y no hagan nada.
+8. **Documenta desviaciones**: si por una regla de negocio, accesibilidad o limitación técnica no puedes seguir el mockup, anótalo en el reporte de la tarea (y en ADR si el cambio es de alcance visual).
 
 **Desktop:** sidebar contraíble, encabezado con título/breadcrumbs, buscador cuando aplique, notificaciones, perfil; tarjetas, formularios y tablas legibles. Diseñar sobre 1440 y 1280 px.
 
