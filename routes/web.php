@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\HouseholdController;
 use App\Http\Controllers\HouseholdInvitationController;
+use App\Http\Controllers\HouseholdMemberController;
 use App\Http\Controllers\HouseholdOnboardingController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\PasswordRecoveryController;
@@ -40,6 +41,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/mi-hogar/invitaciones', [HouseholdInvitationController::class, 'store'])->name('household.invitations.store');
     Route::post('/mi-hogar/invitaciones/{invitation}/reenviar', [HouseholdInvitationController::class, 'resend'])->name('household.invitations.resend');
     Route::post('/mi-hogar/invitaciones/{invitation}/cancelar', [HouseholdInvitationController::class, 'cancel'])->name('household.invitations.cancel');
+
+    // EP03-06: gestión de integrantes (solo administración, Policy Household::manageMembers).
+    Route::post('/mi-hogar/integrantes/{member}/rol', [HouseholdMemberController::class, 'updateRole'])->name('household.members.role')->whereNumber('member');
+    Route::post('/mi-hogar/integrantes/{member}/suspender', [HouseholdMemberController::class, 'suspend'])->name('household.members.suspend')->whereNumber('member');
+    Route::post('/mi-hogar/integrantes/{member}/reactivar', [HouseholdMemberController::class, 'reactivate'])->name('household.members.reactivate')->whereNumber('member');
+    Route::post('/mi-hogar/integrantes/{member}/retirar', [HouseholdMemberController::class, 'remove'])->name('household.members.remove')->whereNumber('member');
 
     Route::post('/invitacion/{token}/aceptar', [InvitationController::class, 'accept'])->name('invitation.accept');
 });

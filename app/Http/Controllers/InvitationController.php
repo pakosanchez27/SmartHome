@@ -69,10 +69,13 @@ class InvitationController extends Controller
             // Activa la membresía: nuevo registro o reactivación (RG-10, sin borrar historial).
             $householdUser = $user->households()->wherePivot('household_id', $invitation->household_id)->first();
 
-            if ($householdUser) {
+            if ($householdUser !== null) {
+                // Reactiva la membresía: también a quien estaba retirado,
+                // porque la única vía de regreso es una nueva invitación.
                 $user->households()->updateExistingPivot($invitation->household_id, [
                     'role' => $invitation->role,
                     'deactivated_at' => null,
+                    'removed_at' => null,
                 ]);
             } else {
                 DB::table('household_user')->insert([
@@ -80,6 +83,7 @@ class InvitationController extends Controller
                     'user_id' => $user->id,
                     'role' => $invitation->role,
                     'deactivated_at' => null,
+                    'removed_at' => null,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

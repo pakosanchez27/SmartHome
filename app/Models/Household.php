@@ -25,7 +25,7 @@ class Household extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->withPivot(['role', 'deactivated_at'])->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot(['role', 'deactivated_at', 'removed_at'])->withTimestamps();
     }
 
     public function invitations(): HasMany

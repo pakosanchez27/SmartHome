@@ -21,6 +21,7 @@ class HouseholdController extends Controller
             return view('household.index', [
                 'household' => null,
                 'members' => collect(),
+                'inactiveMembers' => collect(),
                 'invitations' => collect(),
                 'memberCount' => 0,
                 'pendingCount' => 0,
@@ -32,10 +33,15 @@ class HouseholdController extends Controller
         // resolución ya valida pertenencia, la autorización se declara explícita).
         $this->authorize('view', $household);
 
-        $members = $household->users()
-            ->wherePivotNull('deactivated_at')
-            ->orderByPivot('created_at')
-            ->get();
+        // RG-01: toda consulta pertenencia al hogar activo; se filtra en memoria
+        // para evitar orWhere sueltos que rompan el aislamiento del join.
+        $allMembers = $household->users()->orderByPivot('created_at')->get();
+        $isActivo = fn ($m) => $m->pivot->deactivated_at === null && $m->pivot->removed_at === null;
+
+        $members = $allMembers->filter($isActivo)->values();
+
+        // Desactivados (reactivables) y retirados (requieren nueva invitación): EP03-06.
+        $inactiveMembers = $allMembers->reject($isActivo)->values();
 
         $invitations = $household->invitations()->limit(20)->get();
         $viewerRole = $request->user()->roleIn($household);
@@ -43,6 +49,7 @@ class HouseholdController extends Controller
         return view('household.index', [
             'household' => $household,
             'members' => $members,
+            'inactiveMembers' => $inactiveMembers,
             'invitations' => $invitations,
             'memberCount' => $members->count(),
             'pendingCount' => $invitations->where('status', HouseholdInvitation::STATUS_PENDING)->count(),
