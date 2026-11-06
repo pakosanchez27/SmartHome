@@ -19,7 +19,7 @@ class HouseholdModelTest extends TestCase
         $household = new Household(['name' => 'Hogar de prueba']);
         $household->creator()->associate($owner);
         $household->save();
-        $household->users()->attach($owner, ['role' => 'administrator']);
+        $household->users()->attach($owner, ['role' => 'admin']);
         $household->users()->attach($member, ['role' => 'viewer', 'deactivated_at' => now()]);
 
         $this->assertSame('MXN', $household->fresh()->currency);
@@ -37,6 +37,6 @@ class HouseholdModelTest extends TestCase
         $household->users()->attach($user, ['role' => 'administrator']);
 
         $this->expectException(QueryException::class);
-        $household->users()->attach($user, ['role' => 'administrator']);
+        $household->users()->attach($user, ['role' => 'admin']);
     }
 }

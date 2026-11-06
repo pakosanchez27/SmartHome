@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\HouseholdController;
+use App\Http\Controllers\HouseholdInvitationController;
 use App\Http\Controllers\HouseholdOnboardingController;
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\PasswordRecoveryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +34,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/mi-perfil', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/mi-perfil/contrasena', [ProfileController::class, 'password'])->name('profile.password');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/mi-hogar', [HouseholdController::class, 'index'])->name('household.index');
+    Route::post('/mi-hogar/invitaciones', [HouseholdInvitationController::class, 'store'])->name('household.invitations.store');
+    Route::post('/mi-hogar/invitaciones/{invitation}/reenviar', [HouseholdInvitationController::class, 'resend'])->name('household.invitations.resend');
+    Route::post('/mi-hogar/invitaciones/{invitation}/cancelar', [HouseholdInvitationController::class, 'cancel'])->name('household.invitations.cancel');
+
+    Route::post('/invitacion/{token}/aceptar', [InvitationController::class, 'accept'])->name('invitation.accept');
+});
+
+Route::post('/invitacion/{token}/rechazar', [InvitationController::class, 'reject'])->name('invitation.reject');
+Route::get('/invitacion/{token}', [InvitationController::class, 'show'])->name('invitation.show');
 
 // Recorridos de demostración sin persistencia; no son módulos de producción.
 Route::prefix('prototipos')->name('prototypes.')->group(function () {

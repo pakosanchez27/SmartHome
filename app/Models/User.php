@@ -25,6 +25,26 @@ class User extends Authenticatable
         return $this->belongsToMany(Household::class)->withPivot(['role', 'deactivated_at'])->withTimestamps();
     }
 
+    /** Membresías sin desactivar (RG-01: los inactivos no operan). */
+    public function activeHouseholds(): BelongsToMany
+    {
+        return $this->households()->wherePivotNull('deactivated_at');
+    }
+
+    /** Rol activo del usuario en un hogar, o null si no pertenece (o está desactivado). */
+    public function roleIn(Household|int $household): ?string
+    {
+        $householdId = $household instanceof Household ? $household->id : $household;
+        $pivot = $this->households()->firstWhere('household_id', $householdId)?->pivot;
+
+        return $pivot && $pivot->deactivated_at === null ? $pivot->role : null;
+    }
+
+    public function isAdminOf(Household|int $household): bool
+    {
+        return $this->roleIn($household) === 'admin';
+    }
+
     /**
      * The attributes that are mass assignable.
      *

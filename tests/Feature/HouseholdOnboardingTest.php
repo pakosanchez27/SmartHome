@@ -34,7 +34,7 @@ class HouseholdOnboardingTest extends TestCase
         $this->assertTrue($household->fresh()->budget_carryover);
         $this->assertSame(15, $household->fresh()->cutoff_day);
         $this->assertNotNull($user);
-        $this->assertSame('administrator', $user->pivot->role);
+        $this->assertSame('admin', $user->pivot->role);
         $this->assertSame($user->id, $household->fresh()->created_by);
     }
 

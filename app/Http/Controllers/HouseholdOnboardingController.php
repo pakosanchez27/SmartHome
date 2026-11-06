@@ -52,12 +52,18 @@ class HouseholdOnboardingController extends Controller
 
             $household->creator()->associate($user);
             $household->save();
-            $household->users()->attach($user, ['role' => 'administrator']);
+            $household->users()->attach($user, ['role' => 'admin']);
         });
 
         Auth::login($user);
         $request->session()->regenerate();
         $request->session()->put('current_household_id', $household->id);
+
+        // EP03-04: si el registro vino de un enlace de invitación, regresa a completarla.
+        $pendingInvitationToken = $request->session()->pull('invitation_token');
+        if ($pendingInvitationToken !== null) {
+            return redirect()->route('invitation.show', $pendingInvitationToken);
+        }
 
         return redirect()->route('home')->with('status', '¡Listo! Tu hogar «'.$validated['household_name'].'» quedó preparado. Podrás invitar a tu pareja desde Mi hogar.');
     }
