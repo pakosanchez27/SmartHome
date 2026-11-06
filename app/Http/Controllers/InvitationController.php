@@ -45,9 +45,10 @@ class InvitationController extends Controller
             abort(404, 'Esta invitación ya no existe.');
         }
 
-        if ($user->email === null || strcasecmp($user->email, $invitation->email) !== 0) {
-            abort(403, 'Esta invitación fue enviada a otro correo.');
-        }
+        // EP03-05: Policy HouseholdInvitation::accept — correo coincidente,
+        // invitación pendiente y vigente (RG-01); el claim condicional de abajo
+        // conserva la idempotencia frente a concurrencia (RG-04).
+        $this->authorize('accept', $invitation);
 
         $result = DB::transaction(function () use ($invitation, $user) {
             // Rechazo idempotente por condición: evita doble contabilización o doble uso.

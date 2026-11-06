@@ -28,6 +28,10 @@ class HouseholdController extends Controller
             ]);
         }
 
+        // EP03-05: Policy Household::view — solo roles activos (RG-01 aunque la
+        // resolución ya valida pertenencia, la autorización se declara explícita).
+        $this->authorize('view', $household);
+
         $members = $household->users()
             ->wherePivotNull('deactivated_at')
             ->orderByPivot('created_at')

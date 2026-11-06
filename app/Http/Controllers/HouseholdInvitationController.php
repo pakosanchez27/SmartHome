@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Household;
 use App\Models\HouseholdInvitation;
 use App\Models\User;
 use App\Notifications\HouseholdInvitationNotification;
@@ -19,7 +18,14 @@ class HouseholdInvitationController extends Controller
 {
     public function store(Request $request): RedirectResponse
     {
-        $household = $this->requireAdminHousehold($request);
+        $household = app(CurrentHousehold::class)->resolve($request);
+
+        if ($household === null) {
+            abort(403, 'Solo la administradora del hogar puede invitar o gestionar invitaciones.');
+        }
+
+        // EP03-05: solo admin (Policy Household::manageMembers, ROLES_Y_PRIVACIDAD §1).
+        $this->authorize('manageMembers', $household);
 
         $validated = $request->validate([
             'email' => [
@@ -68,7 +74,8 @@ class HouseholdInvitationController extends Controller
 
     public function resend(Request $request, HouseholdInvitation $invitation): RedirectResponse
     {
-        abort_unless($request->user()->isAdminOf($invitation->household_id), 403, 'Solo la administradora del hogar puede gestionar esta invitación.');
+        // EP03-05: solo admin del hogar emisor (Policy HouseholdInvitation::resend).
+        $this->authorize('resend', $invitation);
 
         if ($invitation->status !== HouseholdInvitation::STATUS_PENDING || $invitation->expires_at->isPast()) {
             return back()->withErrors(['invitaciones' => 'Solo se puede reenviar una invitación pendiente y vigente.']);
@@ -90,7 +97,8 @@ class HouseholdInvitationController extends Controller
 
     public function cancel(Request $request, HouseholdInvitation $invitation): RedirectResponse
     {
-        abort_unless($request->user()->isAdminOf($invitation->household_id), 403, 'Solo la administradora del hogar puede gestionar esta invitación.');
+        // EP03-05: solo admin del hogar emisor (Policy HouseholdInvitation::cancel).
+        $this->authorize('cancel', $invitation);
 
         if ($invitation->status !== HouseholdInvitation::STATUS_PENDING) {
             return back()->withErrors(['invitaciones' => 'Solo se puede cancelar una invitación pendiente.']);
@@ -99,17 +107,5 @@ class HouseholdInvitationController extends Controller
         $invitation->update(['status' => HouseholdInvitation::STATUS_REVOKED]);
 
         return back()->with('status', 'Invitación de '.$invitation->email.' cancelada.');
-    }
-
-    /** Garantiza en servidor que el actor es admin activo del hogar afectado (RG-01). */
-    private function requireAdminHousehold(Request $request): Household
-    {
-        $household = app(CurrentHousehold::class)->resolve($request);
-
-        if ($household === null || ! $request->user()->isAdminOf($household)) {
-            abort(403, 'Solo la administradora del hogar puede invitar o gestionar invitaciones.');
-        }
-
-        return $household;
     }
 }
