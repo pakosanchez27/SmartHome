@@ -40,6 +40,10 @@
                 <a href="{{ route('password.request') }}" class="inline-flex min-h-11 items-center text-sm font-semibold text-primary">Olvidé mi contraseña</a>
                 <p class="text-xs text-muted">Si usas un dispositivo compartido, no actives Recordarme.</p>
             </form>
+            <p class="mt-6 border-t border-border pt-6 text-center text-sm text-muted">
+                Aún no hay hogar en SmartHome
+                <a href="{{ route('household.register') }}" class="font-semibold text-primary">Crea el tuyo</a>
+            </p>
         </div>
         <p class="text-xs text-muted">SmartHome</p>
     </main>

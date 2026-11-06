@@ -10,7 +10,7 @@
 >
 > **Estado del proyecto:** este documento es el plan, **no** un registro de lo ya construido. Al 2026-11-05 no existe código de la aplicación en el repositorio.
 >
-> **Avance al 2026-11-05:** EP-00 terminado (documentación y ADR propuestos). EP-01 en progreso: base Laravel 12, MySQL, Tailwind, Alpine, Inter, Lucide, colas, scheduler, configuración de OpenRouter, repositorio Git y CI listos; **EP01-05 pendiente** (las migraciones de dominio se crearán en la épica que define cada entidad). Las 10 ADR están en estado `Propuesto` y requieren aprobación.
+> **Avance al 2026-11-06:** EP-00 y EP-01 terminados; EP-02 implementa el sistema de diseño y la biblioteca UI. EP-03 en progreso: EP03-01 y EP03-03 ya tienen código y pruebas (el alta inicial crea usuario y hogar juntos, en una transacción). EP03-02 está parcial: los frames A01–A05 del grupo de acceso y onboarding **no existen en el archivo Figma**; la pantalla de alta se implementó como puente con el lenguaje del design system y está **pendiente de diseño oficial**. Las ADR siguen en estado Propuesto/Parcialmente aprobado.
 >
 > **Origen:** contenido sincronizado desde el tablero Trello «SmartHome | Desarrollo del Sistema» (`https://trello.com/b/TUKFQqRh/smarthome-desarrollo-del-sistema`).
 
@@ -169,9 +169,9 @@
 **Objetivo:** dos cuentas independientes con un hogar compartido y posibilidad real de invitar a más integrantes.
 
 **Tareas:**
-- [ ] EP03-01 Login, recuperación de contraseña, edición de perfil y cierre de sesión.
-- [ ] EP03-02 Entidades `households`, `users`, `household_user`, invitaciones con token de un solo uso y caducidad.
-- [ ] EP03-03 Alta inicial de hogar: nombre, MXN, zona horaria, quincenas y primer administrador.
+- [x] EP03-01 Login, recuperación de contraseña, edición de perfil y cierre de sesión.<!-- 2026-11-05 -->
+- [ ] EP03-02 Entidades `households`, `users`, `household_user`, invitaciones con token de un solo uso y caducidad.<!-- 2026-11-05: tablas base listas; faltan invitaciones -->
+- [x] EP03-03 Alta inicial de hogar: nombre, MXN, zona horaria, quincenas y primer administrador.<!-- 2026-11-06: registro+hogar en una transacción; pantalla provisional por falta de frames A01–A05 en Figma; día de corte fijo en 15 según ADR-0001 pendiente -->
 - [ ] EP03-04 Invitaciones por correo, aceptación, rechazo, caducidad y revocación.
 - [ ] EP03-05 Roles: administrador, integrante y consulta. Permisos server-side mediante Policies/Gates.
 - [ ] EP03-06 Permitir dos administradores del hogar, invitados adicionales y cambio/revocación de roles.

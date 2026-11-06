@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\HouseholdOnboardingController;
 use App\Http\Controllers\PasswordRecoveryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'ui-kit')->name('home');
 
 Route::middleware('guest')->group(function () {
+    Route::get('/crear-hogar', [HouseholdOnboardingController::class, 'create'])->name('household.register');
+    Route::post('/crear-hogar', [HouseholdOnboardingController::class, 'store'])->middleware('throttle:auth')->name('household.register.store');
     Route::get('/iniciar-sesion', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('/iniciar-sesion', [AuthenticatedSessionController::class, 'store'])->name('login.store');
     Route::get('/recuperar-acceso', [PasswordRecoveryController::class, 'create'])->name('password.request');
