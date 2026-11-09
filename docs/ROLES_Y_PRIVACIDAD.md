@@ -51,6 +51,7 @@ Un **usuario** puede pertenecer a uno o más **hogares**. El rol se define por v
 6. **Invitaciones:** token hasheado, un solo uso, caducidad y revocación; el rol se asigna al aceptar.
 7. **Desactivación:** un usuario inactivo no puede autenticarse ni operar, pero su histórico se conserva.
 8. **Auditoría:** acciones sensibles registran actor, hogar, entidad, acción, fecha y origen.
+9. **Cambio de visibilidad:** solo el titular comparte u oculta sus recursos; la vigencia actual rige para reportes y agregados del hogar — al volver privada una cuenta, sus movimientos dejan de contarse; los totals que omitan cuentas privadas se marcan «No incluye cuentas privadas» (ADR-0002).
 
 ## 5. Sesiones y credenciales
 
@@ -60,9 +61,11 @@ Un **usuario** puede pertenecer a uno o más **hogares**. El rol se define por v
 - Recuperación de contraseña con token de un solo uso y caducidad.
 - No se registran tokens, contraseñas ni datos financieros completos en logs.
 
-## 6. Pendientes (ver ADR-0002)
+## 6. Pendientes
 
-- Política exacta de cuentas privadas/compartidas y quién puede administrarlas.
 - Si un integrante puede exportar datos del hogar.
 - Si el rol `consulta` puede ver montos o solo totales.
 - Procedimiento de transferencia de administración si un adulto queda inactivo.
+
+> La política de cuentas privadas/compartidas quedó resuelta en ADR-0002 (aprobado 2026-11-06);
+> ver §4 regla 9.

@@ -1,36 +1,31 @@
 # ADR-0002 — Cuentas privadas/compartidas y administración
 
-- **Estado:** Parcialmente aprobado
-- **Fecha:** 2026-11-05
+- **Estado:** Aprobado
+- **Fecha:** 2026-11-05 (aprobación completa 2026-11-06)
 - **Épicas afectadas:** EP-03, EP-04, EP-05, EP-16, EP-17, EP-18
-- **Decisor:** Titular del producto; decisiones restantes pendientes
+- **Decisor:** Titular del producto
 
 ## Contexto
 
-Cada adulto puede tener cuentas personales (efectivo, banco) además de cuentas del hogar. RG-01 exige que una cuenta privada no aparezca en listados, agregados, reportes, notificaciones ni IA de otro usuario. Falta definir el valor por defecto y quién puede cambiar la visibilidad.
-
-## Opciones
-
-1. **Privada por defecto**, con acción explícita "compartir con el hogar" solo por el titular. Máxima privacidad; requiere fricción para cuentas conjuntas.
-2. **Compartida por defecto**, con opción de marcar privada. Más cómodo para el hogar; riesgo de exponer datos por descuido.
-3. **Obligatoriamente compartida** si la cuenta se usa en presupuestos compartidos. Consistencia contable; limita la privacidad.
-
-### Administración
-- ¿Puede un administrador ver el saldo (no los movimientos) de una cuenta privada de otro integrante?
-- ¿Puede el titular compartir una cuenta y luego ocultarla, dejando movimientos históricos?
-
-## Recomendación
-
-Privada por defecto (opción 1). Compartir es una acción explícita del titular, con confirmación y registro en auditoría. Un administrador **no** ve cuentas privadas ajenas, ni siquiera totales. Ocultar una cuenta no borra su histórico; deja de listarse para el hogar.
+Cada adulto puede tener cuentas personales (efectivo, banco) además de cuentas del hogar. RG-01 exige que una cuenta privada no aparezca en listados, agregados, reportes, notificaciones ni IA de otro usuario. Las alternativas eran: privada por defecto, compartida por defecto u obligatoriamente compartida en presupuestos.
 
 ## Decisión
 
-El titular confirmó que **las cuentas serán privadas por defecto**. RG-01 impide que otros integrantes consulten una cuenta privada, incluidos sus saldos y agregados. El titular puede compartirla con el hogar y después volverla privada; el historial se conserva.
+**Las cuentas son privadas por defecto.** Compartir es una acción explícita del titular, con confirmación; el historial se conserva al volver a privada.
 
-**Pendiente de precisar:** efectos concretos sobre movimientos, reportes y agregados históricos al cambiar la visibilidad, y si otras personas pueden administrarla. Conservar el historial no implica autorizar su consulta a integrantes sin permiso.
+Precisiones aprobadas el 2026-11-06:
+
+1. **Agregados:** ningún integrante —incluida la administración— ve saldos o totales que contengan cuentas privadas ajenas. Los totals del hogar que omiten cuentas privadas se marcan «No incluye cuentas privadas» (RG-11: no presentar un total como completo cuando hay cuentas excluidas).
+2. **Histórico al cambiar visibilidad:** la **vigencia actual rige**. Al volver privada una cuenta, sus movimientos dejan de contarse en reportes y agregados del hogar desde ese momento; el titular conserva su histórico completo en su propio acceso. Un reporte del hogar «histórico» ahora completo, excluye las cuentas que hoy son privadas.
+3. **Administración:** la administración del hogar **no** cambia la visibilidad de cuentas ajenas. Solo el titular comparte u oculta los suyas (confirmación + registro en auditoría, EP03-08).
+4. **Integrantes desactivados o retirados:** sus cuentas privadas quedan inaccesibles para todos; si el hogar se los reactiva (suspendidos) o los reinvita (retirados), vuelven a ver las suyas. El retiro no otorga a nadie acceso a datos privados ajenos (RG-01).
+5. **Movimientos, apartados y deudas ligados:** heredan la visibilidad del recurso al que pertenecen; no se puede «compartir» un movimiento de una cuenta privada.
+
+Esas reglas se implementan con el mecanismo reutilizable `owner_user_id` + `shared_at` (ver «Consecuencias») y aplican también a necesidades/deseos y metas del titular.
 
 ## Consecuencias
 
-- Política `AccountPolicy` con reglas por titular y hogar.
-- Reportes y dashboard excluyen cuentas privadas ajenas aunque el total quede incompleto (se indica "no incluye cuentas privadas").
-- Pruebas de IDOR y agregados.
+- **Mecanismo de datos (contrato EP03-07):** los recursos personales llevan `owner_user_id` (null = recurso del hogar) y `shared_at` timestamp nullable (null = privada; fecha = compartida). Cambiar visibilidad gestiona `shared_at`; el histórico del registro nunca se borra (RG-10).
+- **Código reutilizable:** enum `App\Enums\Visibility` y trait `App\Models\Concerns\HasOwnerVisibility` (predicado `isVisibleTo` y alcance `scopeVisibleTo`); los recursos del hogar sin titular son visibles para todos los roles activos del hogar; Ep-04+ agrega `household_id` por regla general.
+- Reportes y dashboard excluyen cuentas privadas ajenas aunque el total quede incompleto; se indica «No incluye cuentas privadas».
+- Pruebas de IDOR y agregados por epic efectos; el Referencia del contrato: docs/ROLES_Y_PRIVACIDAD.md §3–§4.
