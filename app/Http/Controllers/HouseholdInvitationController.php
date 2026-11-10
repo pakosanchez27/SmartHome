@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\HouseholdInvitation;
 use App\Models\User;
 use App\Notifications\HouseholdInvitationNotification;
+use App\Services\ActivityLogger;
 use App\Services\CurrentHousehold;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -65,6 +67,10 @@ class HouseholdInvitationController extends Controller
             'expires_at' => now()->addDays(HouseholdInvitation::EXPIRES_IN_DAYS),
         ]);
 
+        app(ActivityLogger::class)->log($household, $request->user(), ActivityLog::CREATED_INVITATION, $invitation, [
+            'role' => $invitation->role,
+        ]);
+
         Mail::to($invitation->email)->send(
             new HouseholdInvitationNotification($invitation->load(['household', 'invitedBy']), $rawToken)
         );
@@ -88,6 +94,8 @@ class HouseholdInvitationController extends Controller
             'expires_at' => now()->addDays(HouseholdInvitation::EXPIRES_IN_DAYS),
         ]);
 
+        app(ActivityLogger::class)->log($invitation->household, $request->user(), ActivityLog::RESENT_INVITATION, $invitation);
+
         Mail::to($invitation->email)->send(
             new HouseholdInvitationNotification($invitation->load(['household', 'invitedBy']), $rawToken)
         );
@@ -105,6 +113,8 @@ class HouseholdInvitationController extends Controller
         }
 
         $invitation->update(['status' => HouseholdInvitation::STATUS_REVOKED]);
+
+        app(ActivityLogger::class)->log($invitation->household, $request->user(), ActivityLog::REVOKED_INVITATION, $invitation);
 
         return back()->with('status', 'Invitación de '.$invitation->email.' cancelada.');
     }

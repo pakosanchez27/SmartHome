@@ -1,9 +1,9 @@
 # ADR-0003 — Pago familiar con cuenta individual
 
-- **Estado:** Propuesto
+- **Estado:** Aprobado
 - **Fecha:** 2026-11-05
 - **Épicas afectadas:** EP-04, EP-05, EP-06, EP-16
-- **Decisor:** Pendiente (titular del producto)
+- **Decisor:** Titular del producto (2026-11-10)
 
 ## Contexto
 
@@ -21,7 +21,9 @@ Opción 1 solo si se aprueba un registro explícito de deuda interna; por defect
 
 ## Decisión
 
-Pendiente de aprobación.
+Se aprueba la **opción 2**: el gasto pertenece a la cuenta real del titular,
+se marca como gasto del hogar y no genera reembolso, deuda interna ni
+transferencia automática.
 
 ## Consecuencias
 

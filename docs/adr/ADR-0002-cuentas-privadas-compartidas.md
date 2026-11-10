@@ -26,6 +26,6 @@ Esas reglas se implementan con el mecanismo reutilizable `owner_user_id` + `shar
 ## Consecuencias
 
 - **Mecanismo de datos (contrato EP03-07):** los recursos personales llevan `owner_user_id` (null = recurso del hogar) y `shared_at` timestamp nullable (null = privada; fecha = compartida). Cambiar visibilidad gestiona `shared_at`; el histórico del registro nunca se borra (RG-10).
-- **Código reutilizable:** enum `App\Enums\Visibility` y trait `App\Models\Concerns\HasOwnerVisibility` (predicado `isVisibleTo` y alcance `scopeVisibleTo`); los recursos del hogar sin titular son visibles para todos los roles activos del hogar; Ep-04+ agrega `household_id` por regla general.
+- **Código reutilizable:** enum `App\Enums\Visibility` y trait `App\Models\Concerns\HasOwnerVisibility` (predicado `isVisibleTo` y alcance `scopeVisibleTo($viewer, $household)`); ambos exigen una membresía activa y el alcance recibe el hogar obligatorio. Los recursos del hogar sin titular son visibles para los roles activos de ese hogar; EP-04+ agrega `household_id` por regla general.
 - Reportes y dashboard excluyen cuentas privadas ajenas aunque el total quede incompleto; se indica «No incluye cuentas privadas».
 - Pruebas de IDOR y agregados por epic efectos; el Referencia del contrato: docs/ROLES_Y_PRIVACIDAD.md §3–§4.

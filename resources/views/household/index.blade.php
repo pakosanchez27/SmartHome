@@ -8,10 +8,10 @@
         /** @var $inactiveMembers \Illuminate\Support\Collection<\App\Models\User> $inactiveMembers */
         /** @var $invitations \Illuminate\Support\Collection<\App\Models\HouseholdInvitation> $invitations */
         $tabs = [
-            ['label' => 'Integrantes', 'active' => true],
+            ['label' => 'Integrantes', 'href' => route('household.index'), 'active' => $tab === 'integrantes'],
             ['label' => 'Mi perfil', 'href' => route('profile.edit')],
-            ['label' => 'Permisos y privacidad'], // EP03-05/07
-            ['label' => 'Actividad'],             // EP03-08/09
+            ['label' => 'Permisos y privacidad', 'href' => route('household.index', ['tab' => 'permisos']), 'active' => $tab === 'permisos'],
+            ['label' => 'Actividad', 'href' => route('household.index', ['tab' => 'actividad']), 'active' => $tab === 'actividad'],
         ];
 
         $abrirModal = $errors->hasAny(['email', 'role', 'message']);
@@ -34,11 +34,11 @@
 
     <x-page-header
         eyebrow="Mi hogar"
-        title="Integrantes"
-        description="Organicen su hogar, con un lugar y un permiso por cada persona."
+        title="{{ match ($tab) { 'actividad' => 'Actividad del hogar', 'permisos' => 'Permisos y privacidad', default => 'Integrantes' } }}"
+        description="{{ match ($tab) { 'actividad' => 'Un historial claro de lo que hacen juntos, sin exponer lo privado.', 'permisos' => 'Decidan qué comparte cada persona. Lo personal sigue siendo personal.', default => 'Organicen su hogar, con un lugar y un permiso por cada persona.' } }}"
     >
         <x-slot:actions>
-            @if ($puedeGestionar)
+            @if ($puedeGestionar && $tab === 'integrantes')
                 <x-button icon="user-plus" x-on:click="$dispatch('open-modal', 'invitar-integrante')">
                     Invitar integrante
                 </x-button>
@@ -66,6 +66,10 @@
                 description="Si recibiste un enlace de invitación por correo, ábrelo desde tu bandeja para entrar al hogar. Sin invitación, pide a quien administra tu hogar que te invite."
             />
         </x-card>
+    @elseif ($tab === 'actividad')
+        @include('household.partials.activity')
+    @elseif ($tab === 'permisos')
+        @include('household.partials.permissions')
     @else
         <x-card spacing="p-5">
             <div class="space-y-3">

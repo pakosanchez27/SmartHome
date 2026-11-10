@@ -50,7 +50,7 @@ Un **usuario** puede pertenecer a uno o más **hogares**. El rol se define por v
 5. **Sin filtración en exportaciones, notificaciones e IA:** las mismas políticas aplican a estos canales.
 6. **Invitaciones:** token hasheado, un solo uso, caducidad y revocación; el rol se asigna al aceptar.
 7. **Desactivación:** un usuario inactivo no puede autenticarse ni operar, pero su histórico se conserva.
-8. **Auditoría:** acciones sensibles registran actor, hogar, entidad, acción, fecha y origen.
+8. **Auditoría:** acciones sensibles registran actor, hogar, entidad, acción, fecha y origen. Los metadatos no almacenan contraseñas, tokens, correos, importes ni contenido libre.
 9. **Cambio de visibilidad:** solo el titular comparte u oculta sus recursos; la vigencia actual rige para reportes y agregados del hogar — al volver privada una cuenta, sus movimientos dejan de contarse; los totals que omitan cuentas privadas se marcan «No incluye cuentas privadas» (ADR-0002).
 
 ## 5. Sesiones y credenciales

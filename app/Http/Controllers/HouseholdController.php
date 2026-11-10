@@ -15,6 +15,8 @@ class HouseholdController extends Controller
 {
     public function index(Request $request): View
     {
+        $tab = $request->string('tab')->value();
+        $tab = in_array($tab, ['integrantes', 'permisos', 'actividad'], true) ? $tab : 'integrantes';
         $household = app(CurrentHousehold::class)->resolve($request);
 
         if ($household === null) {
@@ -26,6 +28,8 @@ class HouseholdController extends Controller
                 'memberCount' => 0,
                 'pendingCount' => 0,
                 'viewerRole' => null,
+                'tab' => $tab,
+                'activityLogs' => collect(),
             ]);
         }
 
@@ -45,6 +49,30 @@ class HouseholdController extends Controller
 
         $invitations = $household->invitations()->limit(20)->get();
         $viewerRole = $request->user()->roleIn($household);
+        $activityLogs = collect();
+
+        if ($tab === 'actividad') {
+            $query = $household->activityLogs()->with('actor')->latest('created_at');
+
+            // Admin ve actividad del hogar; integrante solo la propia; consulta no ve auditoría.
+            if ($viewerRole === 'member') {
+                $query->where('actor_user_id', $request->user()->id);
+            } elseif ($viewerRole !== 'admin') {
+                $query->whereRaw('1 = 0');
+            }
+
+            if ($request->filled('actor') && $viewerRole === 'admin') {
+                $query->where('actor_user_id', $request->integer('actor'));
+            }
+            if ($request->filled('from')) {
+                $query->whereDate('created_at', '>=', $request->date('from'));
+            }
+            if ($request->filled('to')) {
+                $query->whereDate('created_at', '<=', $request->date('to'));
+            }
+
+            $activityLogs = $query->limit(50)->get();
+        }
 
         return view('household.index', [
             'household' => $household,
@@ -54,6 +82,8 @@ class HouseholdController extends Controller
             'memberCount' => $members->count(),
             'pendingCount' => $invitations->where('status', HouseholdInvitation::STATUS_PENDING)->count(),
             'viewerRole' => $viewerRole,
+            'tab' => $tab,
+            'activityLogs' => $activityLogs,
         ]);
     }
 }

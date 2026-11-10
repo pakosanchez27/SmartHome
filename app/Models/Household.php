@@ -32,4 +32,9 @@ class Household extends Model
     {
         return $this->hasMany(HouseholdInvitation::class)->latest();
     }
+
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class)->latest();
+    }
 }

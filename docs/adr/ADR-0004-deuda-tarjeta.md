@@ -1,9 +1,9 @@
 # ADR-0004 — Deuda de tarjeta: gasto original vs. liquidación
 
-- **Estado:** Propuesto
+- **Estado:** Aprobado
 - **Fecha:** 2026-11-05
 - **Épicas afectadas:** EP-04, EP-06, EP-13
-- **Decisor:** Pendiente (titular del producto)
+- **Decisor:** Titular del producto (2026-11-10)
 
 ## Contexto
 
@@ -21,7 +21,9 @@ Opción 1. La compra crea un egreso en la cuenta de crédito (o una línea de pa
 
 ## Decisión
 
-Pendiente de aprobación.
+Se aprueba la **opción 1**: la compra con tarjeta es un gasto al momento de
+confirmarla; el pago de la tarjeta es una transferencia desde la cuenta de
+origen hacia el pasivo, sin crear un segundo gasto.
 
 ## Consecuencias
 

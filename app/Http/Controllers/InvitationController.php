@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\HouseholdInvitation;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -100,6 +102,10 @@ class InvitationController extends Controller
                 ->withErrors(['invitacion' => $this->unusableReason($invitation)]);
         }
 
+        app(ActivityLogger::class)->log($invitation->household, $user, ActivityLog::ACCEPTED_INVITATION, $invitation, [
+            'role' => $invitation->role,
+        ]);
+
         // El hogar de la invitación pasa a ser el hogar activo de la sesión.
         $request->session()->forget('invitation_token');
         $request->session()->put('current_household_id', $invitation->household_id);
@@ -127,6 +133,8 @@ class InvitationController extends Controller
             return redirect()->route('invitation.show', $token)
                 ->withErrors(['invitacion' => $this->unusableReason($invitation->fresh())]);
         }
+
+        app(ActivityLogger::class)->log($invitation->household, $request->user(), ActivityLog::REJECTED_INVITATION, $invitation);
 
         return redirect()->route('home')->with('status', 'La invitación ha sido rechazada; no se te dará acceso.');
     }

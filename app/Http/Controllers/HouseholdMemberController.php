@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Household;
 use App\Models\HouseholdInvitation;
 use App\Models\User;
+use App\Services\ActivityLogger;
 use App\Services\CurrentHousehold;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,6 +50,10 @@ class HouseholdMemberController extends Controller
             ->where('user_id', $member->id)
             ->update(['role' => $validated['role'], 'updated_at' => now()]);
 
+        app(ActivityLogger::class)->log($household, $request->user(), ActivityLog::UPDATED_MEMBER_ROLE, $member, [
+            'role' => $validated['role'],
+        ]);
+
         $role = HouseholdInvitation::roleLabelFor($validated['role']);
 
         return back()->with('status', "Rol de {$member->name} actualizado a {$role}.");
@@ -72,6 +78,8 @@ class HouseholdMemberController extends Controller
             ->where('user_id', $member->id)
             ->update(['deactivated_at' => now(), 'updated_at' => now()]);
 
+        app(ActivityLogger::class)->log($household, $request->user(), ActivityLog::SUSPENDED_MEMBER, $member);
+
         return back()->with('status', "{$member->name} quedó desactivada: no ve ni edita nada del hogar hasta que se reactive.");
     }
 
@@ -92,6 +100,8 @@ class HouseholdMemberController extends Controller
             ->where('household_id', $household->id)
             ->where('user_id', $member->id)
             ->update(['deactivated_at' => null, 'updated_at' => now()]);
+
+        app(ActivityLogger::class)->log($household, $request->user(), ActivityLog::REACTIVATED_MEMBER, $member);
 
         return back()->with('status', "{$member->name} vuelve a tener acceso con su rol anterior.");
     }
@@ -114,6 +124,8 @@ class HouseholdMemberController extends Controller
                 'deactivated_at' => now(),
                 'updated_at' => now(),
             ]);
+
+        app(ActivityLogger::class)->log($household, $request->user(), ActivityLog::REMOVED_MEMBER, $member);
 
         return back()->with('status', "{$member->name} fue retirada del hogar. Sus registros conservan su autoría; para volver, invítala de nuevo.");
     }
