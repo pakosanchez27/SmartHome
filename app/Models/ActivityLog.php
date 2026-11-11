@@ -58,4 +58,39 @@ class ActivityLog extends Model
     {
         return $this->belongsTo(User::class, 'actor_user_id');
     }
+
+    /** Etiqueta en es-MX para el feed de actividad (J04). */
+    public function label(): string
+    {
+        return static::actionLabels()[$this->action] ?? 'Acción registrada';
+    }
+
+    /**
+     * Acción => texto legible. Toda acción nueva debe registrarse aquí: el
+     * respaldo de `label()` evita romper la página, pero la prueba
+     * `ActivityLogLabelTest` exige que ninguna acción quede sin etiqueta.
+     *
+     * @return array<string, string>
+     */
+    public static function actionLabels(): array
+    {
+        return [
+            self::UPDATED_MEMBER_ROLE => 'Se actualizó un rol',
+            self::SUSPENDED_MEMBER => 'Se desactivó un integrante',
+            self::REACTIVATED_MEMBER => 'Se reactivó un integrante',
+            self::REMOVED_MEMBER => 'Se retiró un integrante',
+            self::CREATED_INVITATION => 'Se invitó a una persona',
+            self::RESENT_INVITATION => 'Se reenvió una invitación',
+            self::REVOKED_INVITATION => 'Se canceló una invitación',
+            self::ACCEPTED_INVITATION => 'Se aceptó una invitación',
+            self::REJECTED_INVITATION => 'Se rechazó una invitación',
+            self::CREATED_ACCOUNT => 'Se creó una cuenta',
+            self::UPDATED_ACCOUNT => 'Se actualizó una cuenta',
+            self::CREATED_CATEGORY => 'Se creó una categoría',
+            self::UPDATED_CATEGORY => 'Se actualizó una categoría',
+            self::RECORDED_TRANSACTION => 'Se registró un movimiento',
+            self::UPDATED_TRANSACTION => 'Se corrigió un movimiento',
+            self::CANCELED_TRANSACTION => 'Se anuló un movimiento',
+        ];
+    }
 }

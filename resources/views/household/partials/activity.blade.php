@@ -26,17 +26,7 @@
                 @php
                     $actor = $log->actor?->name ?? 'Sistema';
                     $iniciales = collect(explode(' ', $actor))->map(fn ($word) => mb_substr($word, 0, 1))->take(2)->implode('');
-                    $accion = match ($log->action) {
-                        \App\Models\ActivityLog::CREATED_INVITATION => 'Se invitó a una persona',
-                        \App\Models\ActivityLog::RESENT_INVITATION => 'Se reenvió una invitación',
-                        \App\Models\ActivityLog::REVOKED_INVITATION => 'Se canceló una invitación',
-                        \App\Models\ActivityLog::ACCEPTED_INVITATION => 'Se aceptó una invitación',
-                        \App\Models\ActivityLog::REJECTED_INVITATION => 'Se rechazó una invitación',
-                        \App\Models\ActivityLog::UPDATED_MEMBER_ROLE => 'Se actualizó un rol',
-                        \App\Models\ActivityLog::SUSPENDED_MEMBER => 'Se desactivó un integrante',
-                        \App\Models\ActivityLog::REACTIVATED_MEMBER => 'Se reactivó un integrante',
-                        \App\Models\ActivityLog::REMOVED_MEMBER => 'Se retiró un integrante',
-                    };
+                    $accion = $log->label();
                 @endphp
                 <li class="py-4"><div class="flex items-center gap-3"><span class="flex size-11 items-center justify-center rounded-full bg-info-soft text-sm font-semibold text-info">{{ strtoupper($iniciales) }}</span><div><p class="text-sm font-semibold text-ink">{{ $actor }}</p><p class="text-[12px] text-muted">{{ $log->created_at->timezone($household->timezone)->translatedFormat('j M Y · H:i') }}</p></div></div><p class="mt-3 text-sm font-semibold text-ink">{{ $accion }}</p><p class="mt-1 text-[13px] text-muted">Mi hogar · Registro de auditoría #{{ $log->id }}</p></li>
             @endforeach
