@@ -16,10 +16,10 @@
 | Épica | Requisito / historia principal | Pantallas | E2E | Prueba prevista | Estado |
 |---|---|---|---|---|---|
 | EP-00 | Reglas, glosario, modelo y decisiones trazables | — | — | Revisión documental | En progreso |
-| EP-01 | Base Laravel reproducible y segura | — | — | `php artisan test`, `npm run build` | Pendiente |
-| EP-02 | UI consistente y responsive | Transversal (B01) | — | Revisión 360/390/768/1280/1440 | Pendiente |
-| EP-03 | Dos cuentas, hogar compartido, permisos | A01–A05, J01–J05, K01/K03 | 1, 9, 11 | Feature de auth, invitaciones y Policies | Pendiente |
-| EP-04 | Saldos reales y movimientos únicos | C01, C04–C08, C13 | 2, 3, 12 | Unit de saldo + Feature de transferencias | Pendiente |
+| EP-01 | Base Laravel reproducible y segura | — | — | `php artisan test`, `npm run build` | Terminado (2026-11-10) |
+| EP-02 | UI consistente y responsive | Transversal (B01) | — | Revisión 360/390/768/1280/1440 | En progreso |
+| EP-03 | Dos cuentas, hogar compartido, permisos | A01–A05, J01–J05, K01/K03 | 1, 9, 11 | Feature de auth, invitaciones y Policies | Terminado (2026-11-10) |
+| EP-04 | Saldos reales y movimientos únicos | C01, C04–C08, C13 | 2, 3, 12 | Unit de saldo + Feature de transferencias | En progreso (núcleo 2026-11-10; falta EP04-09 y filtros de usuario/ámbito) |
 | EP-05 | Presupuesto quincenal vs. real | C02, C03, C01, C12 | 2 | Unit de cálculos + Feature de periodos | Pendiente |
 | EP-06 | Pagos programados y deudas sin duplicar | C09, C10 | 4 | Feature de pago y abonos | Pendiente |
 | EP-07 | Apartados virtuales y metas | C11, H04, H05 | 4 | Unit de disponible operativo | Pendiente |

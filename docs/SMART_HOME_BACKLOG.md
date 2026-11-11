@@ -114,7 +114,7 @@
 
 **Dependencias:** EP-00 · **Estado inicial:** Backlog
 
-**Avance:** base instalada y verificada el 2026-11-05. EP01-05 queda pendiente de las migraciones de dominio de EP-03/EP-04; la convención `DECIMAL(14,2)` ya está declarada en `config/smarthome.php`.
+**Avance:** base instalada y verificada el 2026-11-05. EP01-05 cerrado el 2026-11-10 con las migraciones de dominio de EP-03/EP-04 y el seeder por módulo (`FinanceDemoSeeder`, datos ficticios); la convención `DECIMAL(14,2)` vive en `config/smarthome.php`.
 
 **Objetivo:** disponer de una aplicación mantenible preparada para funcionalidades familiares.
 
@@ -123,7 +123,7 @@
 - [x] EP01-02 Instalar/configurar Blade, Tailwind CSS, Alpine.js, Inter y Lucide.
 - [x] EP01-03 Estructurar rutas, controllers, requests, services/actions, policies, jobs, notifications y tests.
 - [x] EP01-04 Configurar autenticación segura, sesiones, CSRF, rate limiting, registro de errores y manejo uniforme de excepciones.
-- [ ] EP01-05 Crear migraciones y seeders iniciales separados por módulo; definir moneda `DECIMAL(14,2)` y timestamps.
+- [x] EP01-05 Crear migraciones y seeders iniciales separados por módulo; definir moneda `DECIMAL(14,2)` y timestamps. *(cerrado 2026-11-10: migraciones por módulo y `FinanceDemoSeeder`)*
 - [x] EP01-06 Preparar storage privado, subida segura de imágenes/comprobantes y política de backups.
 - [x] EP01-07 Configurar colas, Scheduler, envío de correo transaccional, logs y variables de entorno.
 - [x] EP01-08 Configurar repositorio Git, ramas, estándares de código, formateador y ejecución automática de pruebas.
@@ -190,19 +190,21 @@
 **Dependencias:** EP-03 · **Estado inicial:** Backlog
 **Pantallas:** C01, C04, C05, C06, C07, C08, C13.
 
+**Avance 2026-11-10:** núcleo implementado y probado (suite completa en verde, 179 pruebas). Dinero en `DECIMAL(14,2)` con aritmética entera de centavos (`MoneyCast`/`Money`); saldos reconstruidos desde saldo inicial + líneas confirmadas (`LedgerService`); cuentas con privacidad ADR-0002; registro de ingresos/gastos/transferencias vía acción `RecordTransaction` con visibilidad decidida en servidor; corrección limitada a datos descriptivos y anulación con auditoría `activity_logs` (ADR-0011, pendiente de aprobación: cambiar importe o cuenta exige anular y re-registrar); categorías del hogar; historial filtrable; vistas C01/C04–C06/C08/C13 sobre el sistema de diseño EP-02. Queda pendiente EP04-09 (adjuntos, aviso de duplicidad y captura rápida móvil dedicada). *Desviación documentada: en esta sesión no hubo acceso a la herramienta de Figma, por lo que las vistas se compusieron exclusivamente con los componentes y tokens del sistema de diseño EP-02 (derivados del archivo Figma); pendiente la revisión visual contra los frames C01/C04–C08/C13 cuando exista acceso.*
+
 **Objetivo:** tener una fuente de verdad financiera independiente del presupuesto.
 
 **Tareas:**
-- [ ] EP04-01 Entidades `accounts`, `categories`, `transactions`, `transaction_lines` o equivalente transaccional, y referencias a origen.
-- [ ] EP04-02 Tipos de cuenta: efectivo, banco, débito, crédito, ahorro, otra; definir cómo se muestran pasivos y límites de crédito sin inflar disponible.
-- [ ] EP04-03 Saldo inicial explícito y movimientos posteriores; dinero con `DECIMAL`, sin floats.
-- [ ] EP04-04 CRUD de movimientos: ingreso, gasto y transferencia; validación de cuenta, importe positivo, categoría, ámbito y fecha.
-- [ ] EP04-05 Diferenciar movimientos confirmados, programados/anulados y notas; no contar dos veces transferencias.
-- [ ] EP04-06 Historial con filtros por rango, categoría, cuenta, usuario y ámbito; diseño desktop/móvil.
-- [ ] EP04-07 Detalle, editar según política y anular mediante contramovimiento/auditoría.
-- [ ] EP04-08 Crear categorías del usuario/hogar (alimentación, renta, luz, internet, transporte, salud, etc.).
-- [ ] EP04-09 Registro rápido desde móvil, adjuntos opcionales, avisos de posible duplicidad.
-- [ ] EP04-10 Pruebas de saldos y visibilidad, dos usuarios concurrentes y movimientos cruzados.
+- [x] EP04-01 Entidades `accounts`, `categories`, `transactions`, `transaction_lines` o equivalente transaccional, y referencias a origen. *(morfología `origin_type`/`origin_id` lista para RG-04; sin consumidor hasta EP-06/EP-13)*
+- [x] EP04-02 Tipos de cuenta: efectivo, banco, débito, crédito, ahorro, otra; definir cómo se muestran pasivos y límites de crédito sin inflar disponible.
+- [x] EP04-03 Saldo inicial explícito y movimientos posteriores; dinero con `DECIMAL`, sin floats.
+- [x] EP04-04 CRUD de movimientos: ingreso, gasto y transferencia; validación de cuenta, importe positivo, categoría, ámbito y fecha.
+- [x] EP04-05 Diferenciar movimientos confirmados, programados/anulados y notas; no contar dos veces transferencias.
+- [ ] EP04-06 Historial con filtros por rango, categoría, cuenta, usuario y ámbito; diseño desktop/móvil. *(avance: rango, tipo, categoría, cuenta y búsqueda con vista desktop/móvil; falta filtro por usuario y por ámbito)*
+- [x] EP04-07 Detalle, editar según política y anular mediante contramovimiento/auditoría. *(anulación = estado «cancelado» + exclusión de saldos + registro en `activity_logs`; efecto neto equivalente al contramovimiento sin duplicar líneas)*
+- [x] EP04-08 Crear categorías del usuario/hogar (alimentación, renta, luz, internet, transporte, salud, etc.).
+- [ ] EP04-09 Registro rápido desde móvil, adjuntos opcionales, avisos de posible duplicidad. *(avance: formulario responsive con teclado numérico y fecha rápida; faltan adjuntos, aviso de duplicidad y flujo rápido dedicado)*
+- [x] EP04-10 Pruebas de saldos y visibilidad, dos usuarios concurrentes y movimientos cruzados. *(cobertura: saldos RG-02/03/08, privacidad RG-01, corrección/anulación RG-10, transferencias y dos integrantes operando; el control de concurrencia estricto se resuelve en EP-12 con listas compartidas)*
 
 **Criterios:** cada gasto aparece una sola vez; transferir entre cuentas no altera ingresos/egresos agregados; saldos se reproducen desde histórico; no se accede a cuentas ajenas privadas; anulación deja trazabilidad.
 

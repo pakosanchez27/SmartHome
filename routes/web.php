@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\HouseholdController;
 use App\Http\Controllers\HouseholdInvitationController;
 use App\Http\Controllers\HouseholdMemberController;
@@ -8,6 +11,7 @@ use App\Http\Controllers\HouseholdOnboardingController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\PasswordRecoveryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,6 +53,34 @@ Route::middleware('auth')->group(function () {
     Route::post('/mi-hogar/integrantes/{member}/retirar', [HouseholdMemberController::class, 'remove'])->name('household.members.remove')->whereNumber('member');
 
     Route::post('/invitacion/{token}/aceptar', [InvitationController::class, 'accept'])->name('invitation.accept');
+});
+
+/*
+ | EP-04 · Finanzas (C01, C04, C05, C06, C08, C13).
+ | Todas las rutas exigen sesión; el hogar activo y los permisos se validan
+ | en cada controlador (RG-01). El orden de las rutas fijas precede al binding
+ | para que /nueva y /nuevo nunca se interpreten como un ID.
+ */
+Route::middleware('auth')->prefix('finanzas')->name('finance.')->group(function () {
+    Route::get('/', [FinanceController::class, 'index'])->name('index');
+
+    Route::get('/cuentas/nueva', [AccountController::class, 'create'])->name('accounts.create');
+    Route::post('/cuentas', [AccountController::class, 'store'])->name('accounts.store');
+    Route::get('/cuentas/{account}', [AccountController::class, 'show'])->name('accounts.show')->whereNumber('account');
+    Route::get('/cuentas/{account}/editar', [AccountController::class, 'edit'])->name('accounts.edit')->whereNumber('account');
+    Route::put('/cuentas/{account}', [AccountController::class, 'update'])->name('accounts.update')->whereNumber('account');
+
+    Route::get('/movimientos', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/movimientos/nuevo', [TransactionController::class, 'create'])->name('transactions.create');
+    Route::post('/movimientos', [TransactionController::class, 'store'])->name('transactions.store');
+    Route::get('/movimientos/{transaction}', [TransactionController::class, 'show'])->name('transactions.show')->whereNumber('transaction');
+    Route::get('/movimientos/{transaction}/editar', [TransactionController::class, 'edit'])->name('transactions.edit')->whereNumber('transaction');
+    Route::put('/movimientos/{transaction}', [TransactionController::class, 'update'])->name('transactions.update')->whereNumber('transaction');
+    Route::post('/movimientos/{transaction}/anular', [TransactionController::class, 'annul'])->name('transactions.annul')->whereNumber('transaction');
+
+    Route::get('/categorias', [CategoryController::class, 'index'])->name('categories.index');
+    Route::post('/categorias', [CategoryController::class, 'store'])->name('categories.store');
+    Route::put('/categorias/{category}', [CategoryController::class, 'update'])->name('categories.update')->whereNumber('category');
 });
 
 Route::post('/invitacion/{token}/rechazar', [InvitationController::class, 'reject'])->name('invitation.reject');

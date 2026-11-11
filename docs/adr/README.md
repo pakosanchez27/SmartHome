@@ -1,7 +1,7 @@
 # Decisiones de arquitectura (ADR)
 
 **Épica:** EP-00 · **Tarea:** EP00-06
-**Última actualización:** 2026-11-05
+**Última actualización:** 2026-11-10
 
 ## Índice
 
@@ -17,6 +17,7 @@
 | [ADR-0008](./ADR-0008-edicion-concurrente.md) | Edición concurrente de listas e inventario | Propuesto |
 | [ADR-0009](./ADR-0009-openrouter-privacidad.md) | OpenRouter: modelo, privacidad y retención | Propuesto |
 | [ADR-0010](./ADR-0010-confirmacion-consumo-compra.md) | Confirmación de consumo y de compra | Propuesto |
+| [ADR-0011](./ADR-0011-correccion-anulacion-movimientos.md) | Corrección y anulación de movimientos | Implementado provisionalmente |
 
 > **Estado `Propuesto`:** documenta opciones y recomendación, pero **no** autoriza implementar una regla definitiva. Requiere aprobación del responsable del producto antes de cerrar la tarea que dependa de ella.
 

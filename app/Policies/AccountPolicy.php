@@ -3,64 +3,47 @@
 namespace App\Policies;
 
 use App\Models\Account;
+use App\Models\Household;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
+/**
+ * EP04-02/EP04-10: autorización de cuentas (RG-01).
+ *
+ * - `viewAny`: cualquier integrante activo puede ver el módulo.
+ * - `view`/`update`: exige que la cuenta sea visible para quien consulta
+ *   (privada del titular o compartida con el hogar) y rol operativo.
+ * - `viewer` (consulta) nunca crea ni modifica dinero.
+ * - `delete` queda prohibido: las cuentas se desactivan conservando historial (RG-10).
+ */
 class AccountPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, Household $household): bool
     {
-        return false;
+        return $user->roleIn($household) !== null;
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Account $account): bool
     {
-        return false;
+        return $account->isVisibleTo($user);
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(User $user, Household $household): bool
     {
-        return false;
+        return $this->operates($user, $household);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Account $account): bool
     {
-        return false;
+        return $account->isVisibleTo($user) && $this->operates($user, $account->household_id);
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, Account $account): bool
     {
         return false;
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Account $account): bool
+    private function operates(User $user, Household|int $household): bool
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Account $account): bool
-    {
-        return false;
+        return in_array($user->roleIn($household), ['admin', 'member'], true);
     }
 }

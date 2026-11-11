@@ -110,6 +110,13 @@ resources/
 
 ## Próximos pasos
 
-1. **EP-00:** cerrar ADR pendientes con el responsable del producto.
-2. **EP-01:** completar verificación en el entorno local.
-3. **EP-02:** sistema de diseño, layouts y componentes Blade.
+1. **EP-05:** presupuesto quincenal/mensual sobre el núcleo financiero ya funcional.
+2. **EP-04:** completar lo pendiente (EP04-09: adjuntos, aviso de duplicidad y captura rápida móvil; filtros por usuario y ámbito en el historial).
+3. **EP-02:** cerrar componentes y prototipos restantes del sistema de diseño.
+
+## Datos de demo
+
+`php artisan migrate:fresh --seed` crea el hogar ficticio «Hogar Rivera (demo)» con
+dos integrantes (`ana.rivera@example.com` y `luis.torres@example.com`, contraseña
+`password`), cuentas, categorías y movimientos que ejercitan saldos, privacidad
+y anulación. Úsalo solo en bases de desarrollo: nunca contra datos reales.

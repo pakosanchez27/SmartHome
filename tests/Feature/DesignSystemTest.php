@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Support\Navigation;
 use Tests\TestCase;
 
 class DesignSystemTest extends TestCase
@@ -33,10 +34,23 @@ class DesignSystemTest extends TestCase
     public function test_los_modulos_sin_ruta_se_muestran_deshabilitados_y_no_como_enlaces_muertos(): void
     {
         $response = $this->get('/');
+        $html = $response->getContent();
+
+        $pendientes = collect(Navigation::main())
+            ->filter(fn (array $item) => ! Navigation::isAvailable($item));
+
+        $this->assertNotEmpty($pendientes, 'Debe existir al menos un módulo pendiente para probar el estado deshabilitado.');
 
         $response->assertSee('aria-disabled="true"', false);
-        $response->assertSee('disponible en EP-04', false);
         $response->assertDontSee('href="#"', false);
+
+        foreach ($pendientes as $item) {
+            $this->assertStringContainsString(
+                'disponible en '.$item['epic'],
+                $html,
+                "El módulo «{$item['label']}» deshabilitado debe anunciar su épica."
+            );
+        }
     }
 
     public function test_el_shell_cumple_accesibilidad_basica(): void

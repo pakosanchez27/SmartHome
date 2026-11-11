@@ -51,7 +51,8 @@ class NavigationTest extends TestCase
         $items = collect(Navigation::main())->keyBy('label');
 
         $this->assertTrue(Navigation::isAvailable($items['Inicio']));
-        $this->assertFalse(Navigation::isAvailable($items['Finanzas']));
+        $this->assertTrue(Navigation::isAvailable($items['Finanzas']), 'EP-04 ya expone el módulo financiero.');
+        $this->assertTrue(Navigation::isAvailable($items['Mi hogar']));
         $this->assertFalse(Navigation::isAvailable($items['Despensa']));
     }
 

@@ -2,65 +2,58 @@
 
 namespace App\Policies;
 
+use App\Enums\TransactionStatus;
+use App\Models\Household;
 use App\Models\Transaction;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
+/**
+ * EP04-04/EP04-07: autorización de movimientos (RG-01).
+ *
+ * Un movimiento anulado es historia: nadie lo edita ni lo vuelve a anular.
+ * El rol `viewer` no registra ni corrige dinero.
+ */
 class TransactionPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, Household $household): bool
     {
-        return false;
+        return $user->roleIn($household) !== null;
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Transaction $transaction): bool
     {
-        return false;
+        return $transaction->isVisibleTo($user);
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(User $user, Household $household): bool
     {
-        return false;
+        return $this->operates($user, $household);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Transaction $transaction): bool
     {
-        return false;
+        return $this->isEditable($transaction, $user);
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
+    public function annul(User $user, Transaction $transaction): bool
+    {
+        return $this->isEditable($transaction, $user);
+    }
+
     public function delete(User $user, Transaction $transaction): bool
     {
         return false;
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Transaction $transaction): bool
+    private function isEditable(Transaction $transaction, User $user): bool
     {
-        return false;
+        return $transaction->isVisibleTo($user)
+            && $this->operates($user, $transaction->household_id)
+            && $transaction->status === TransactionStatus::Confirmed;
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Transaction $transaction): bool
+    private function operates(User $user, Household|int $household): bool
     {
-        return false;
+        return in_array($user->roleIn($household), ['admin', 'member'], true);
     }
 }

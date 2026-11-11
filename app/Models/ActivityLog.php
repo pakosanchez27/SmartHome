@@ -26,6 +26,20 @@ class ActivityLog extends Model
 
     public const REJECTED_INVITATION = 'household_invitation.rejected';
 
+    public const CREATED_ACCOUNT = 'finance.account.created';
+
+    public const UPDATED_ACCOUNT = 'finance.account.updated';
+
+    public const CREATED_CATEGORY = 'finance.category.created';
+
+    public const UPDATED_CATEGORY = 'finance.category.updated';
+
+    public const RECORDED_TRANSACTION = 'finance.transaction.recorded';
+
+    public const UPDATED_TRANSACTION = 'finance.transaction.updated';
+
+    public const CANCELED_TRANSACTION = 'finance.transaction.canceled';
+
     public $timestamps = false;
 
     protected $guarded = [];
